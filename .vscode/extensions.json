@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "naumovs.color-highlight",
+    "dbaeumer.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+    "EditorConfig.EditorConfig",
+    "mhutchie.git-graph",
+  ]
+}
