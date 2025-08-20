@@ -13,7 +13,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItemProps[] = [
 export const Navigation = () => {
   const { navigationItems } = useNavigation(DEFAULT_NAVIGATION_ITEMS);
   return (
-    <nav className="flex gap-6">
+    <nav className="md:flex gap-6 hidden">
       {navigationItems.map((item) => (
         <NavigationItem key={item.id} {...item} />
       ))}
