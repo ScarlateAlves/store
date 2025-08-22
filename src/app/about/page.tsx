@@ -3,160 +3,33 @@
 export default function About() {
   return (
     <div>
-      <div>
-        <div
-          id="tableHeaders"
-          style={{
-            overflowX: "hidden",
-            position: "sticky",
-            top: 0,
-
-            background: "red",
-            color: "white",
-          }}
-        >
-          <table>
+      <div className="max-w-full" style={{ overflow: "clip" }}>
+        <div className="overflow-x-auto">
+          <table className="border-collapse min-w-[800px] w-full">
             <thead>
               <tr>
-                <th
-                  style={{ whiteSpace: "nowrap", left: 0, position: "sticky" }}
-                >
-                  1. A Very Long Header That Never Ends
+                <th className="sticky top-0 left-0 bg-white z-[15] p-3 border border-gray-300 drop-shadow-custom font-semibold">
+                  Header 1
                 </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
+                <th className="sticky top-0 bg-white z-10 p-3 border border-gray-300 drop-shadow-custom">
+                  Header 2
                 </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
-                </th>{" "}
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
-                </th>{" "}
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
-                </th>{" "}
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
+                <th className="sticky top-0 bg-white z-10 p-3 border border-gray-300 drop-shadow-custom">
+                  Header 3
                 </th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-
-        <div
-          id="tableBody"
-          style={{ overflowX: "scroll" }}
-          onScroll={(e) => {
-            const tableHeaders = document.getElementById("tableHeaders");
-            if (tableHeaders) {
-              tableHeaders.scrollLeft = (e.target as HTMLDivElement).scrollLeft;
-            }
-          }}
-        >
-          <table>
-            <thead style={{ lineHeight: "0px", opacity: 0 }}>
-              <tr>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  1. A Very Long Header That Never Ends
-                </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  2. A Very Long Header That Never Ends
-                </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  3. A Very Long Header That Never Ends
-                </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  4. A Very Long Header That Never Ends
-                </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  5. A Very Long Header That Never Ends
-                </th>
-                <th style={{ whiteSpace: "nowrap" }}>
-                  6. A Very Long Header That Never Ends
+                <th className="sticky top-0 bg-white z-10 p-3 border border-gray-300 drop-shadow-custom">
+                  Header 4
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td
-                  style={{
-                    whiteSpace: "nowrap",
-                    background: "pink",
-                    left: 0,
-                    position: "sticky",
-                  }}
-                >
-                  1. This is some very long content
+                <td className="sticky left-0 bg-white z-[5] p-3 border border-gray-300 drop-shadow-custom font-medium">
+                  Célula 1
                 </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  2. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  3. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  4. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  5. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  6. This is some very long content
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    whiteSpace: "nowrap",
-                    background: "pink",
-                    left: 0,
-                    position: "sticky",
-                  }}
-                >
-                  1. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  2. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  3. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  4. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  5. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  6. This is some very long content
-                </td>
-              </tr>
-              <tr>
-                <td
-                  style={{
-                    whiteSpace: "nowrap",
-                    background: "pink",
-                    left: 0,
-                    position: "sticky",
-                  }}
-                >
-                  1. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  2. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  3. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  4. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  5. This is some very long content
-                </td>
-                <td style={{ whiteSpace: "nowrap" }}>
-                  6. This is some very long content
-                </td>
+                <td className="p-3 border border-gray-300">Conteúdo 1</td>
+                <td className="p-3 border border-gray-300">Conteúdo 2</td>
+                <td className="p-3 border border-gray-300">Conteúdo 3</td>
               </tr>
             </tbody>
           </table>

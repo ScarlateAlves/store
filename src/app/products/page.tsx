@@ -1,30 +1,60 @@
 "use client";
 
 import { table } from "@/utils/mock.table";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+const INITIAL_ROWS_VISIBLE = 5;
+const TABLE_HEADERS_ID = "tableHeaders";
 
 export default function Products() {
-  const numberLength = table.header.products.length;
-
   const [expanded, setExpanded] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
-  const handleSize = () => {
+  console.log({ isScrolling });
+
+  const totalProductsCount = table.header.products.length;
+  const visibleRows = expanded
+    ? table.body
+    : table.body.slice(0, INITIAL_ROWS_VISIBLE);
+
+  const handleToggleExpansion = () => {
     setExpanded((prev) => !prev);
   };
 
-  const sizeBody = expanded ? table.body : table.body.slice(0, 5);
+  const handleTableHorizontalScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const tableHeaders = document.getElementById(TABLE_HEADERS_ID);
+    const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
+    if (tableHeaders) tableHeaders.scrollLeft = scrollLeft;
+  };
+
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const element = elementRef.current;
+      if (!element) return;
+
+      const rect = element.getBoundingClientRect();
+      setIsScrolling(rect.top <= 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
+      <div className="h-56">ff</div>
+      <div className="h-4">hhhh</div>
       <div className="max-w-7xl mx-auto">
-        <div className="relative">
+        <div ref={elementRef} className="relative">
           <div
             id="tableHeaders"
             className="overflow-x-hidden sticky top-0 bg-white z-50"
           >
             <table className="w-full border-collapse table-fixed">
               <colgroup>
-                {Array.from({ length: numberLength }).map((_, index) => (
+                {Array.from({ length: totalProductsCount }).map((_, index) => (
                   <col key={index} className="min-w-32" />
                 ))}
               </colgroup>
@@ -37,8 +67,12 @@ export default function Products() {
                     <th key={product.id} className="px-2 py-4 align-middle">
                       <div className="flex items-center flex-col">
                         <p>{product.name}</p>
-                        <p>{product.description}</p>
-                        <p>{product.value}</p>
+                        {!isScrolling && (
+                          <>
+                            <p>{product.description}</p>
+                            <p>{product.value}</p>
+                          </>
+                        )}
                         <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
                           label
                         </button>
@@ -53,18 +87,11 @@ export default function Products() {
           <div
             id="tableBody"
             style={{ overflowX: "scroll" }}
-            onScroll={(e) => {
-              const tableHeaders = document.getElementById("tableHeaders");
-              if (tableHeaders) {
-                tableHeaders.scrollLeft = (
-                  e.target as HTMLDivElement
-                ).scrollLeft;
-              }
-            }}
+            onScroll={handleTableHorizontalScroll}
           >
             <table className="w-full border-collapse table-fixed">
               <colgroup>
-                {Array.from({ length: numberLength }).map((_, index) => (
+                {Array.from({ length: totalProductsCount }).map((_, index) => (
                   <col key={index} className="min-w-32" />
                 ))}
               </colgroup>
@@ -78,7 +105,7 @@ export default function Products() {
               </thead>
 
               <tbody>
-                {sizeBody.map((item, index) => (
+                {visibleRows.map((item, index) => (
                   <>
                     {item.subtitle && (
                       <tr key={index} className="h-14 border-b border-gray-300">
@@ -117,7 +144,7 @@ export default function Products() {
           >
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded"
-              onClick={handleSize}
+              onClick={handleToggleExpansion}
             >
               {expanded ? "Show Less" : "Show More"}
             </button>
