@@ -30,18 +30,22 @@ export default function Products() {
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const element = elementRef.current;
-      if (!element) return;
+    const element = elementRef.current;
+    if (!element) return;
 
-      const rect = element.getBoundingClientRect();
-      setIsScrolling(rect.top <= 0);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsScrolling(entry.isIntersecting);
+      },
+      {
+        threshold: [0, 1], // Múltiplos thresholds para mais precisão
+        rootMargin: "-10px 0px -95% 0px", // Margem ajustada
+      }
+    );
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    observer.observe(element);
+    return () => observer.disconnect();
   }, []);
-
   return (
     <>
       <div className="h-56">ff</div>
