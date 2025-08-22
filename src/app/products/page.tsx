@@ -10,8 +10,6 @@ export default function Products() {
   const [expanded, setExpanded] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
 
-  console.log({ isScrolling });
-
   const totalProductsCount = table.header.products.length;
   const visibleRows = expanded
     ? table.body
@@ -54,7 +52,7 @@ export default function Products() {
         <div ref={elementRef} className="relative">
           <div
             id="tableHeaders"
-            className="overflow-x-hidden sticky top-0 bg-white z-50"
+            className="overflow-x-hidden sticky top-0 bg-white z-20"
           >
             <table className="w-full border-collapse table-fixed">
               <colgroup>
