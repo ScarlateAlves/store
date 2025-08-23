@@ -1,49 +1,29 @@
 "use client";
 
+import { useScrollObserver } from "@/layout/Header/hooks/useScrollObserver";
 import { table } from "@/utils/mock.table";
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState } from "react";
 
-const INITIAL_ROWS_VISIBLE = 5;
-const TABLE_HEADERS_ID = "tableHeaders";
+const ROWS_VISIBLE = 5;
 
 export default function Products() {
   const [expanded, setExpanded] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
+  const tableHeaderTop = useRef<HTMLDivElement>(null);
+  const { elementRef, isScrolling } = useScrollObserver();
 
-  const totalProductsCount = table.header.products.length;
-  const visibleRows = expanded
-    ? table.body
-    : table.body.slice(0, INITIAL_ROWS_VISIBLE);
+  const totalColumn = table.header.products.length;
+  const visibleRows = expanded ? table.body : table.body.slice(0, ROWS_VISIBLE);
 
   const handleToggleExpansion = () => {
     setExpanded((prev) => !prev);
   };
 
   const handleTableHorizontalScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const tableHeaders = document.getElementById(TABLE_HEADERS_ID);
+    const tableHeaders = tableHeaderTop.current;
     const scrollLeft = (e.target as HTMLDivElement).scrollLeft;
     if (tableHeaders) tableHeaders.scrollLeft = scrollLeft;
   };
 
-  const elementRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsScrolling(entry.isIntersecting);
-      },
-      {
-        threshold: [0, 1], // Múltiplos thresholds para mais precisão
-        rootMargin: "0px 0px -95% 0px", // Margem ajustada
-      }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
   return (
     <>
       <div className="h-56">ff</div>
@@ -51,12 +31,12 @@ export default function Products() {
       <div className="max-w-7xl mx-auto">
         <div ref={elementRef} className="relative">
           <div
-            id="tableHeaders"
-            className="overflow-x-hidden sticky top-0 bg-red-400 z-30"
+            ref={tableHeaderTop}
+            className="overflow-x-hidden sticky top-0 bg-white z-30"
           >
             <table className="w-full border-collapse sm:table-fixed table-auto">
               <colgroup>
-                {Array.from({ length: totalProductsCount }).map((_, index) => (
+                {Array.from({ length: totalColumn }).map((_, index) => (
                   <col key={index} className="min-w-32" />
                 ))}
               </colgroup>
@@ -93,7 +73,7 @@ export default function Products() {
           >
             <table className="w-full border-collapse sm:table-fixed table-auto">
               <colgroup>
-                {Array.from({ length: totalProductsCount }).map((_, index) => (
+                {Array.from({ length: totalColumn }).map((_, index) => (
                   <col key={index} className="min-w-32" />
                 ))}
               </colgroup>
