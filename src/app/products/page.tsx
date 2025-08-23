@@ -37,7 +37,7 @@ export default function Products() {
       },
       {
         threshold: [0, 1], // Múltiplos thresholds para mais precisão
-        rootMargin: "3px 0px -95% 0px", // Margem ajustada
+        rootMargin: "0px 0px -95% 0px", // Margem ajustada
       }
     );
 
