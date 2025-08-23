@@ -52,9 +52,9 @@ export default function Products() {
         <div ref={elementRef} className="relative">
           <div
             id="tableHeaders"
-            className="overflow-x-hidden sticky top-0 bg-white z-20"
+            className="overflow-x-hidden sticky top-0 bg-white z-50"
           >
-            <table className="w-full border-collapse table-fixed">
+            <table className="w-full border-collapse sm:table-fixed table-auto">
               <colgroup>
                 {Array.from({ length: totalProductsCount }).map((_, index) => (
                   <col key={index} className="min-w-32" />
@@ -62,11 +62,14 @@ export default function Products() {
               </colgroup>
               <thead>
                 <tr className="border-b border-gray-300">
-                  <th className="px-4 py-6 align-middle text-left bg-white left-0 sticky">
+                  <th className="px-4 py-6 align-middle text-left bg-white left-0 sticky min-w-32">
                     {table.header.title}
                   </th>
                   {table.header.products.map((product) => (
-                    <th key={product.id} className="px-2 py-4 align-middle">
+                    <th
+                      key={product.id}
+                      className="px-2 py-4 align-middle min-w-32"
+                    >
                       <div className="flex items-center flex-col">
                         <p>{product.name}</p>
                         {!isScrolling && (
@@ -91,7 +94,7 @@ export default function Products() {
             style={{ overflowX: "scroll" }}
             onScroll={handleTableHorizontalScroll}
           >
-            <table className="w-full border-collapse table-fixed">
+            <table className="w-full border-collapse sm:table-fixed table-auto">
               <colgroup>
                 {Array.from({ length: totalProductsCount }).map((_, index) => (
                   <col key={index} className="min-w-32" />
@@ -99,9 +102,13 @@ export default function Products() {
               </colgroup>
               <thead className="opacity-0 leading-0">
                 <tr>
-                  <th className="left-0 sticky">{table.header.title}</th>
+                  <th className="left-0 sticky min-w-32">
+                    {table.header.title}
+                  </th>
                   {table.header.products.map((product) => (
-                    <th key={product.id}>{product.name}</th>
+                    <th key={product.id} className="min-w-32">
+                      {product.name}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -112,16 +119,16 @@ export default function Products() {
                     {item.subtitle && (
                       <tr key={index} className="h-14 border-b border-gray-300">
                         <td
-                          className={`align-middle text-left left-0 sticky text-nowrap py-6 px-4 bg-white`}
+                          className={`align-middle text-left left-0 sticky text-nowrap py-6 px-4 bg-white min-w-32`}
                         >
                           {item.subtitle}
                         </td>
                         {item.inforProducts?.map((product) => (
                           <td
                             key={product.id}
-                            className="px-2 py-4 align-middle text-center"
+                            className="px-2 py-4 align-middle text-center min-w-32"
                           >
-                            {product.name}
+                            {product.name} gggg dddhhhhhh fffdd
                           </td>
                         ))}
                       </tr>
