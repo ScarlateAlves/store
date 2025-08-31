@@ -1,6 +1,6 @@
 "use client";
 
-import { NavigationItemProps } from "@/layout/Header/components/Navegation/NavigationItem";
+import { NavigationItemProps } from "@/components/sections/Header/components/Navegation/NavigationItem";
 import { usePathname } from "next/navigation";
 
 export const useNavigation = (items: NavigationItemProps[]) => {

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart, User, Heart, Menu } from "lucide-react";
 import { Navigation } from "./components/Navegation";
-import { Drawer } from "@/components/Drawer";
+import { Drawer } from "@/components/ui/Drawer";
 
 export const Header = () => {
   return (
