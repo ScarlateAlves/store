@@ -1,6 +1,6 @@
 "use client";
 
-import { useNavigation } from "../../hooks/useNavigation";
+import { useNavigation } from "@/hooks/useNavigation";
 import { NavigationItem, NavigationItemProps } from "./NavigationItem";
 
 export const DEFAULT_NAVIGATION_ITEMS: NavigationItemProps[] = [
@@ -13,7 +13,7 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItemProps[] = [
 export const Navigation = () => {
   const { navigationItems } = useNavigation(DEFAULT_NAVIGATION_ITEMS);
   return (
-    <nav className="md:flex gap-6 hidden">
+    <nav className="flex gap-6 flex-col md:flex-row">
       {navigationItems.map((item) => (
         <NavigationItem key={item.id} {...item} />
       ))}
