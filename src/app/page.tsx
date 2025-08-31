@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/Button";
-import { Heading } from "@/components/Heading";
+import { Button } from "@/components/ui/Button";
+import { Heading } from "@/components/ui/Heading";
 import Image from "next/image";
 
 export default function Home() {

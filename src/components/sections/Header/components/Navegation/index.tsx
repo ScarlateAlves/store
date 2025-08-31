@@ -11,10 +11,13 @@ export const DEFAULT_NAVIGATION_ITEMS: NavigationItemProps[] = [
 ];
 
 export const Navigation = () => {
-  const { navigationItems } = useNavigation(DEFAULT_NAVIGATION_ITEMS);
+  const navigation = useNavigation(DEFAULT_NAVIGATION_ITEMS);
+
+  if (!navigation) return null;
+
   return (
     <nav className="flex gap-6 flex-col md:flex-row">
-      {navigationItems.map((item) => (
+      {navigation.navigationItems.map((item) => (
         <NavigationItem key={item.id} {...item} />
       ))}
     </nav>
