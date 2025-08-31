@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 export const useNavigation = (items: NavigationItemProps[]) => {
   const pathname = usePathname();
 
+  if (!pathname) return false;
   const isActiveRoute = (href: string) => {
     if (href === "/") {
       return pathname === "/";
