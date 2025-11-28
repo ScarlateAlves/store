@@ -34,10 +34,10 @@ jobs:
           git config user.email "actions@github.com"
       - name: Update target branch with source branch
         run: |
-          git fetch origin "$SOURCE"
-          git checkout "$TARGET" || git checkout -b "$TARGET"
+          git fetch origin "${SOURCE}"
+          git checkout "${TARGET}" || git checkout -b "${TARGET}"
 
-          echo "🔄 Merging '$SOURCE' into '$TARGET'..."
+          echo "🔄 Merging '${SOURCE}' into '${TARGET}'..."
           git merge "$SOURCE" --no-edit -X theirs
           echo "⬆️ Pushing changes..."
-          git push origin "$TARGET"
+          git push origin "${TARGET}"
