@@ -11,6 +11,9 @@ on:
         description: "Branch destination"
         required: true
         type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
 
 permissions:
   contents: write
