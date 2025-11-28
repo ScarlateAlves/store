@@ -40,24 +40,21 @@ jobs:
           echo "TARGET=$TARGET"
 
           git fetch origin "$SOURCE"
+          git fetch origin "$TARGET"
 
-          git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
+           git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
 
           echo "🔄 Merging '$SOURCE' into '$TARGET'..."
 
           if ! git merge "origin/$SOURCE"; then
             echo "❌ Conflito detectado!"
 
-            # Aborta o merge
             git merge --abort
 
-            # Nome da branch temporária para o PR
             CONFLICT_BRANCH="conflict/$SOURCE-into-$TARGET"
-
             echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
             git checkout -b "$CONFLICT_BRANCH"
-            git add .
-            git commit -m "chore: conflito ao mesclar main em content-flow"
+            git commit --allow-empty -m "chore: conflito ao mesclar $SOURCE em $TARGET"
             git push -u origin "$CONFLICT_BRANCH"
 
             echo "📬 Criando Pull Request automático..."
@@ -66,11 +63,11 @@ jobs:
               --base "$TARGET" \
               --head "$CONFLICT_BRANCH" \
               --title "⚠️ Conflito ao sincronizar $SOURCE → $TARGET" \
-              --body "Não foi possível fazer o merge automático.\n\nPor favor, resolva os conflitos manualmente."
+              --body "Não foi possível fazer o merge automático. Resolver conflitos manualmente."
 
             echo "✅ PR criado com sucesso"
 
-            exit 1
+            exit 0
           fi
 
           echo "✅ Merge realizado com sucesso"
