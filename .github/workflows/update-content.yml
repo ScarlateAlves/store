@@ -12,7 +12,7 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
+      G_TOKEN:
         required: true
 
 permissions:
