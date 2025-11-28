@@ -11,9 +11,13 @@ on:
         description: "Branch destination"
         required: true
         type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync-branches:
@@ -33,6 +37,7 @@ jobs:
         env:
           SOURCE: ${{ inputs.source }}
           TARGET: ${{ inputs.target }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "SOURCE=$SOURCE"
           echo "TARGET=$TARGET"
@@ -42,7 +47,33 @@ jobs:
           git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
 
           echo "🔄 Merging '$SOURCE' into '$TARGET'..."
-          git merge "origin/$SOURCE" --no-edit -X theirs
 
+          if ! git merge "origin/$SOURCE" --no-edit -X theirs; then
+            echo "❌ Conflito detectado!"
+
+            # Aborta o merge
+            git merge --abort
+
+            # Nome da branch temporária para o PR
+            CONFLICT_BRANCH="conflict/$SOURCE-into-$TARGET"
+
+            echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
+            git checkout -b "$CONFLICT_BRANCH"
+            git push -u origin "$CONFLICT_BRANCH"
+
+            echo "📬 Criando Pull Request automático..."
+
+            gh pr create \
+              --base "$TARGET" \
+              --head "$CONFLICT_BRANCH" \
+              --title "⚠️ Conflito ao sincronizar $SOURCE → $TARGET" \
+              --body "Não foi possível fazer o merge automático.\n\nPor favor, resolva os conflitos manualmente."
+
+            echo "✅ PR criado com sucesso"
+
+            exit 1
+          fi
+
+          echo "✅ Merge realizado com sucesso"
           echo "⬆️ Pushing changes..."
           git push origin "$TARGET"
