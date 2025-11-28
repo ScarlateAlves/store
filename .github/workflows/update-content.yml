@@ -11,9 +11,6 @@ on:
         description: "Branch destination"
         required: true
         type: string
-    secrets:
-      G_TOKEN:
-        required: true
 
 permissions:
   contents: write
