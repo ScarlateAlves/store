@@ -21,10 +21,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-        env:
-          SOURCE: ${{ inputs.source }}
-          TARGET: ${{ inputs.target }}
         with:
           fetch-depth: 0
 
@@ -32,12 +28,21 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-      - name: Update target branch with source branch
-        run: |
-          git fetch origin "${SOURCE}"
-          git checkout "${TARGET}" || git checkout -b "${TARGET}"
 
-          echo "🔄 Merging '${SOURCE}' into '${TARGET}'..."
-          git merge "$SOURCE" --no-edit -X theirs
+      - name: Update target branch with source branch
+        env:
+          SOURCE: ${{ inputs.source }}
+          TARGET: ${{ inputs.target }}
+        run: |
+          echo "SOURCE=$SOURCE"
+          echo "TARGET=$TARGET"
+
+          git fetch origin "$SOURCE"
+
+          git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
+
+          echo "🔄 Merging '$SOURCE' into '$TARGET'..."
+          git merge "origin/$SOURCE" --no-edit -X theirs
+
           echo "⬆️ Pushing changes..."
-          git push origin "${TARGET}"
+          git push origin "$TARGET"
