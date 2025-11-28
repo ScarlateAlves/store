@@ -45,7 +45,7 @@ jobs:
 
           echo "🔄 Merging '$SOURCE' into '$TARGET'..."
 
-          if ! git merge "origin/$SOURCE" --no-edit -X theirs; then
+          if ! git merge "origin/$SOURCE"; then
             echo "❌ Conflito detectado!"
 
             # Aborta o merge
