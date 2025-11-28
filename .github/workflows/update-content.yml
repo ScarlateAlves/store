@@ -36,40 +36,50 @@ jobs:
           TARGET: ${{ inputs.target }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -e
+
           echo "SOURCE=$SOURCE"
           echo "TARGET=$TARGET"
 
           git fetch origin "$SOURCE"
           git fetch origin "$TARGET"
 
-           git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
+          git checkout "$TARGET" || git checkout -b "$TARGET" "origin/$TARGET"
 
           echo "🔄 Merging '$SOURCE' into '$TARGET'..."
 
-          if ! git merge "origin/$SOURCE"; then
-            echo "❌ Conflito detectado!"
+          if git merge "origin/$SOURCE"; then
+            echo "✅ Merge automático funcionou"
+            git push origin "$TARGET"
+            exit 0
+          fi
 
-            git merge --abort
+          echo "❌ Conflito detectado"
 
-            CONFLICT_BRANCH="conflict/$SOURCE-into-$TARGET"
-            echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
-            git checkout -b "$CONFLICT_BRANCH"
-            git commit --allow-empty -m "chore: conflito ao mesclar $SOURCE em $TARGET"
-            git push -u origin "$CONFLICT_BRANCH"
+          git merge --abort
 
-            echo "📬 Criando Pull Request automático..."
+          CONFLICT_BRANCH="conflict/$SOURCE-into-$TARGET"
+           echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
+          # Apaga branch remota antiga, se existir
+          if git ls-remote --exit-code --heads origin "$CONFLICT_BRANCH"; then
+            echo "🧹 Removendo branch antiga"
+            git push origin --delete "$CONFLICT_BRANCH"
+          fi
+          git checkout -b "$CONFLICT_BRANCH"
+          git commit --allow-empty -m "chore: conflito ao mesclar $SOURCE em $TARGET"
+          git push -u origin "$CONFLICT_BRANCH"
 
+          echo "📬 Criando Pull Request automático..."
+
+          # Evita PR duplicado
+          EXISTING_PR=$(gh pr list --base "$TARGET" --head "$CONFLICT_BRANCH" --json number -q '.[0].number')
+
+          if [ -z "$EXISTING_PR" ]; then
             gh pr create \
               --base "$TARGET" \
               --head "$CONFLICT_BRANCH" \
               --title "⚠️ Conflito ao sincronizar $SOURCE → $TARGET" \
               --body "Não foi possível fazer o merge automático. Resolver conflitos manualmente."
-
-            echo "✅ PR criado com sucesso"
-
-            exit 0
+          else
+            echo "ℹ️ PR já existe: #$EXISTING_PR"
           fi
-
-          echo "✅ Merge realizado com sucesso"
-          echo "⬆️ Pushing changes..."
-          git push origin "$TARGET"
