@@ -56,6 +56,8 @@ jobs:
 
             echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
             git checkout -b "$CONFLICT_BRANCH"
+            git add .
+            git commit -m "chore: conflito ao mesclar main em content-flow"
             git push -u origin "$CONFLICT_BRANCH"
 
             echo "📬 Criando Pull Request automático..."
