@@ -58,28 +58,22 @@ jobs:
 
           git merge --abort
 
-          CONFLICT_BRANCH="conflict/$SOURCE-into-$TARGET"
-           echo "🌿 Criando branch de conflito: $CONFLICT_BRANCH"
-          # Apaga branch remota antiga, se existir
-          if git ls-remote --exit-code --heads origin "$CONFLICT_BRANCH"; then
-            echo "🧹 Removendo branch antiga"
-            git push origin --delete "$CONFLICT_BRANCH"
-          fi
-          git checkout -b "$CONFLICT_BRANCH"
-          git commit --allow-empty -m "chore: conflito ao mesclar $SOURCE em $TARGET"
-          git push -u origin "$CONFLICT_BRANCH"
+          # Verifica se já existe PR aberto
+          EXISTING_PR=$(gh pr list \
+            --base "$TARGET" \
+            --head "$SOURCE" \
+            --json number \
+            -q '.[0].number')
 
-          echo "📬 Criando Pull Request automático..."
-
-          # Evita PR duplicado
-          EXISTING_PR=$(gh pr list --base "$TARGET" --head "$CONFLICT_BRANCH" --json number -q '.[0].number')
-
-          if [ -z "$EXISTING_PR" ]; then
-            gh pr create \
-              --base "$TARGET" \
-              --head "$CONFLICT_BRANCH" \
-              --title "⚠️ Conflito ao sincronizar $SOURCE → $TARGET" \
-              --body "Não foi possível fazer o merge automático. Resolver conflitos manualmente."
-          else
+          if [ -n "$EXISTING_PR" ]; then
             echo "ℹ️ PR já existe: #$EXISTING_PR"
+            exit 0
           fi
+
+          echo "📬 Criando PR main → content-flow"
+
+          gh pr create \
+            --base "$TARGET" \
+            --head "$SOURCE" \
+            --title "⚠️ Conflito ao sincronizar $SOURCE → $TARGET" \
+            --body "Conflito detectado. Resolver manualmente via este PR."
