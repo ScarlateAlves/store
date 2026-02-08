@@ -4,17 +4,17 @@ import { useMutation, useQueryClient } from "react-query";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const addTodo = async (data: Todo) => {
-  return await axios.post(API_URL + "/todos", {
+const putTodo = async (data: Todo) => {
+  return await axios.put(API_URL + "/todos/" + data.id, {
     title: data.title,
     completed: data.completed,
   });
 };
 
-export function useTodoMutate() {
+export function useTodoMutateput() {
   const queryClient = useQueryClient();
   const mutate = useMutation({
-    mutationFn: addTodo,
+    mutationFn: putTodo,
     onSuccess: () => {
       queryClient.invalidateQueries(["todos-data"]);
     },
